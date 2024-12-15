@@ -10,5 +10,5 @@ setup(
     author="jdomingu",
     author_email="jdomingu@student.42malaga.com",
     license='MIT',
-    url="https://github.com/jdomingu98/python_for_data_science/starting-0/ex09",
+    url="https://https://github.com/jdomingu98/python-data-science/tree/master/Python%20-%200%20-%20Starting/ex09",
 )
