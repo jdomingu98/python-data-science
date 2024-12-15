@@ -21,10 +21,6 @@ def main():
         AssertionError: If the number of arguments is not exactly two,
             or if the second argument cannot be converted to an integer.
 
-    Example usage:
-        $ python script.py "This is a test message" 3
-        ['This', 'test', 'message']
-
     Args:
         None (Arguments passed through the command line).
 
