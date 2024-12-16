@@ -15,7 +15,7 @@ def ft_load(path: str) -> np.array:
     """
     assert (
         path.lower().endswith((".jpg", ".jpeg"))
-    ), "Only JPG and JPEG formats are supported."
+    ), "format not supported."
     img = cv2.imread(path)
 
     assert img is not None, "Invalid file path."
@@ -24,3 +24,4 @@ def ft_load(path: str) -> np.array:
 
     print(f"The shape of image is: {img.shape}")
     print(img)
+    return img
