@@ -167,3 +167,4 @@ tester.py
 *.DS_Store
 *.jpg
 *.jpeg
+*.csv
