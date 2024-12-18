@@ -1,16 +1,24 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from load_csv import load
 
 
 def main():
+    """
+    Plots the life expectancy projections for Spain using data from a CSV file.
+    """
     ds = load("life_expectancy_years.csv")
-    years = list(map(int, ds.columns[1:]))
-    row = ds[ds["country"] == "France"]
-    plt.plot(years, row.iloc[0, 1:].values)
-    plt.xticks(range(min(years), max(years)+1, 40))
-    plt.title("France Life expectancy Projections")
-    plt.xlabel("Year")
-    plt.ylabel("Life expectancy")
+    years = np.array(ds.columns[1:])
+    row = ds[ds["country"] == "Spain"]
+    life_expectancy = np.array(row.values[0][1:])
+
+    plt.plot(years, life_expectancy)
+    plt.title('Spain Life Expectancy Projections')
+    plt.xlabel('Year')
+    plt.xticks(years[::40])
+    plt.ylabel('Life Expectancy')
+    plt.yticks(range(30, 100, 10))
+    plt.tight_layout()
     plt.show()
 
 

@@ -1,45 +1,56 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from load_csv import load
 
 
-def convert_to_numeric(value):
-    """Convierte valores con sufijos 'k' (mil) o 'M' (millones) a números."""
-    if isinstance(value, str):
-        if 'k' in value:
-            return float(value.replace('k', '')) * 1_000
-        elif 'M' in value:
-            return float(value.replace('M', '')) * 1_000_000
-    return value
+def to_int(number: str) -> float:
+    """
+    Converts a string representing a number with suffixes
+    'M' (millions) or 'k' (thousands) into a float.
+
+    Returns the number as a float if there is no suffix.
+    """
+    if number.endswith("M"):
+        return float(number[:-1]) * 1_000_000
+    if number.endswith("k"):
+        return float(number[:-1]) * 1_000
+    return float(number)
 
 
 def main():
+    """
+    Plots a comparison of population projections for Spain and France
+    using data from a CSV file.
+    """
     ds = load("population_total.csv")
-    years = list(map(int, ds.columns[1:]))
-    years = [year for year in years if year >= 1800 and year <= 2050]
 
-    # Convertir las columnas con valores de población de string a numérico
-    for column in ds.columns[1:]:  # Asumimos que la primera columna es el país
-        ds[column] = ds[column].apply(convert_to_numeric)
+    parser = np.vectorize(to_int)
 
-    france_data = ds[ds["country"] == "France"].iloc[0, 1:].values
-    spain_data = ds[ds["country"] == "Spain"].iloc[0, 1:].values
-    france_values = france_data[
-                        years.index(min(years)):years.index(max(years))+1
-                    ]
-    spain_values = spain_data[
-                        years.index(min(years)):years.index(max(years))+1
-                    ]
+    years = np.array(ds.columns[1:].astype(int))
+    spain_row = parser(ds[ds["country"] == "Spain"].values[0][1:])
+    france_row = parser(ds[ds["country"] == "France"].values[0][1:])
 
-    plt.plot(years, france_values, label="France", color="green")
-    plt.plot(years, spain_values, label="Spain", color="blue")
-    plt.xticks(range(min(years), max(years)+1, 40))
-    y_max = max(max(france_values), max(spain_values))
-    yticks_range = range(0, int(y_max) + 20_000_000, 20_000_000)
-    plt.yticks(yticks_range, [f"{tick//1_000_000}M" for tick if yticks_range])
-    plt.title("Population Projections")
-    plt.xlabel("Year")
-    plt.ylabel("Population")
+    plt.figure(figsize=(10, 6))
+    plt.gcf().canvas.set_window_title('Population Spain vs France')
+    plt.title('Population Projections')
+
+    plt.plot(years, spain_row, label="Spain", color="blue")
+    plt.plot(years, france_row, label="France", color="green")
+
+    plt.xlabel('Year')
+    plt.xticks(range(1800, 2041, 40))
+    plt.xlim(1790, 2050)
+
+    plt.ylabel('Population')
+    print(max(max(spain_row), max(france_row)))
+    y_ticks = range(20_000_000, 80_000_000, 20_000_000)
+    plt.yticks(
+        y_ticks,
+        ["{:,.0f}M".format(pop / 1e6) for pop in y_ticks]
+    )
+    plt.ylim(0, 80_000_000, 20_000_000)
     plt.legend(loc='lower right')
+
     plt.show()
 
 
