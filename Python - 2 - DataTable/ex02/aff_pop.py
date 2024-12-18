@@ -31,7 +31,8 @@ def main():
     france_row = parser(ds[ds["country"] == "France"].values[0][1:])
 
     plt.figure(figsize=(10, 6))
-    plt.gcf().canvas.set_window_title('Population Spain vs France')
+    canvas = plt.gcf().canvas
+    canvas.manager.set_window_title('Population Spain vs France')
     plt.title('Population Projections')
 
     plt.plot(years, spain_row, label="Spain", color="blue")
@@ -42,7 +43,7 @@ def main():
     plt.xlim(1790, 2050)
 
     plt.ylabel('Population')
-    print(max(max(spain_row), max(france_row)))
+
     y_ticks = range(20_000_000, 80_000_000, 20_000_000)
     plt.yticks(
         y_ticks,
