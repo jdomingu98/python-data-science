@@ -19,7 +19,7 @@ class calculator:
         print(self.array)
 
     def __sub__(self, object) -> None:
-        """Substract a number to every element of the array."""
+        """Sustract a number to every element of the array."""
         self.array = list(map(lambda x: x - object, self.array))
         print(self.array)
 
